@@ -33,19 +33,20 @@ class panelMain(wx.Panel):
     def onSortBtnPress(self, event):
         data = pd.read_csv(self.filePath)[['Id','First Name', 'Last Name', 'Belt Size', 'Programs', 'Current Ranks']]
         dfToList = data['Current Ranks'].tolist()
+        count = 0
 
         for rank in dfToList:
             string = str(rank)
             if ',' in string:
-                print(string[:string.index(',')])
-                # rank = string[:string.index(',')]
-        # print(dfToList)
+                update = string[:string.index(',')]
+                data.at[count, 'Current Ranks'] = update
+            count += 1
+
+        data = data.sort_values(by=['Current Ranks'])
+        data.to_csv('new.csv')
 
     def OnPickFileDir(self, evt):
         self.filePath = str(evt.GetPath())
-        print("You chose: %s\n" % self.filePath)
-        # filename = path_leaf(evt.GetPath())
-        # print(str(filename))
 
     def onDownloadBtnPress(self, event):
         usernameStr = 'username'
